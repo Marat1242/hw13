@@ -1,0 +1,215 @@
+﻿@model Business.Data.Customer
+
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<Order> DanhSachDonHang = ViewBag.DonHang;
+    var total = DanhSachDonHang.Sum(x => x.TotalMoney).ToString("#,##0");
+    Supermarket.ModelViews.ChangePasswordViewModel changePassword = new Supermarket.ModelViews.ChangePasswordViewModel();
+}
+<div class="main-container container">
+	<ul class="breadcrumb">
+		<li><a href="#"><i class="fa fa-home"></i></a></li>
+		<li><a href="#">Account</a></li>
+		<li><a href="#">My Account</a></li>
+	</ul>
+
+	<div class="row">
+		<!--Middle Part Start-->
+		<div class="col-sm-9" id="content">
+			<h2 class="title">My Account</h2>
+			<p class="lead">Hello, <strong>@Model.FullName</strong> </p>
+			<form>
+				<div class="row">
+					<div class="col-sm-6">
+
+						<fieldset id="personal-details">
+							<legend>Personal Details</legend>
+						<p>Email: @Model.Email</p>
+						<p>Phone number: @Model.Phone</p>
+						<p>Address: @Model.Address</p>
+
+						</fieldset>
+						<br>
+					</div>
+					<div class="col-sm-6">
+						<fieldset>
+							<legend>Change Password</legend>
+							@await Html.PartialAsync("_ChangePasswordPartialView", changePassword)
+
+						</fieldset>
+						<fieldset>
+							<legend>Newsletter</legend>
+							<div class="form-group">
+								<label class="col-md-2 col-sm-3 col-xs-3 control-label">Subscribe</label>
+								<div class="col-md-10 col-sm-9 col-xs-9">
+									<label class="radio-inline">
+										<input type="radio" value="1" name="newsletter"> Yes
+									</label>
+									<label class="radio-inline">
+										<input type="radio" checked="checked" value="0" name="newsletter"> No
+									</label>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<fieldset id="address">
+							<legend>Payment Address</legend>
+							
+							<div class="myaccount-address">
+                                <p>The following addresses will be used on the checkout page by default.</p>
+                                <div class="row">
+                                    <div class="col">
+                                        <h4 class="small-title">BILLING ADDRESS</h4>
+                                        <address>
+                                            @Model.Address
+                                        </address>
+                                    </div>
+                                    <div class="col">
+                                        <h4 class="small-title">SHIPPING ADDRESS</h4>
+                                        <address>
+                                            @Model.Address
+                                        </address>
+                                    </div>
+                                </div>
+                            </div>
+
+						</fieldset>
+					</div>
+					<div class="col-sm-6">
+						<fieldset id="shipping-address">
+							<legend>List order</legend>
+							
+							 @if (DanhSachDonHang != null && DanhSachDonHang.Count() > 0)
+                                {
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-hover">
+                                            <tbody>
+                                                <tr>
+                                                    <th>ID</th>
+												<th>Date of purchase</th>
+												<th>Delivery Date</th>
+												<th>Status</th>
+                                                </tr>
+                                                @foreach (var item in DanhSachDonHang)
+                                                {
+                                                    <tr>
+                                                        <td><a class="account-order-id" href="javascript:void(0)">#@item.OrderId</a></td>
+                                                        <td>@item.OrderDate</td>
+                                                        <td>@item.ShipDate</td>
+                                                        <td>@item.TransactStatus.Status</td>
+                                                        <td>
+														<a href="javascript:void(0)" class="xemdonhang" data-madonhang="@item.OrderId">View orders</a>
+                                                        </td>
+                                                    </tr>
+                                                }
+
+
+                                            </tbody>
+                                        </table>
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <hr />
+                                        <div id="records_table">
+
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+								<p>No orders yet!</p>
+                                }
+
+
+						</fieldset>
+					</div>
+				</div>
+
+
+
+				<div class="buttons clearfix">
+					<div class="pull-right">
+						<input type="submit" class="btn btn-md btn-primary" value="Save Changes">
+					</div>
+				</div>
+			</form>
+		</div>
+		<!--Middle Part End-->
+		<!--Right Part Start -->
+		<aside class="col-sm-3 hidden-xs content-aside col-md-3" id="column-right">
+			<h2 class="subtitle">Account</h2>
+			<div class="list-group">
+				<ul class="list-item">
+					<li>
+						<a href="login.html">Login</a>
+					</li>
+					<li>
+						<a href="register.html">Register</a>
+					</li>
+					<li>
+						<a href="#">Forgotten Password</a>
+					</li>
+					<li>
+						<a href="#">My Account</a>
+					</li>
+					<li>
+						<a href="#">Address Books</a>
+					</li>
+					<li>
+						<a href="wishlist.html">Wish List</a>
+					</li>
+					<li>
+						<a href="#">Order History</a>
+					</li>
+					<li>
+						<a href="#">Downloads</a>
+					</li>
+					<li>
+						<a href="#">Reward Points</a>
+					</li>
+					<li>
+						<a href="#">Returns</a>
+					</li>
+					<li>
+						<a href="#">Transactions</a>
+					</li>
+					<li>
+						<a href="#">Newsletter</a>
+					</li>
+					<li>
+						<a href="#">Recurring payments</a>
+					</li>
+				</ul>
+			</div>
+		</aside>
+		<!--Right Part End -->
+	</div>
+</div>
+@section Scripts{
+	<script>
+		$(document).ready(function () {
+			$(".xemdonhang").click(function () {
+				var madonhang = $(this).attr("data-madonhang")
+				$.ajax({
+					url: '/Oder/Details',
+					datatype: "json",
+					type: "POST",
+					data: { id: madonhang },
+					async: true,
+					success: function (results) {
+						$("#records_table").html("");
+						$("#records_table").html(results);
+					},
+					error: function (xhr) {
+						alert('error hihi');
+					}
+				});
+			});
+		});
+	</script>
+}

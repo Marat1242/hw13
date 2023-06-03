@@ -1,0 +1,148 @@
+﻿@model Business.Shopping
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<Business.CartItem> Carts = ViewBag.GioHang;
+}
+
+
+<main class="main-content">
+    <div class="breadcrumb-area breadcrumb-height" data-bg-image="/assets/images/banner/2-1-1920x523.jpg">
+        <div class="container h-100">
+            <div class="row h-100">
+                <div class="col-lg-12">
+                    <div class="breadcrumb-item">
+                        <h2 class="breadcrumb-heading">SHOPPING INFORMATION</h2>
+                        <ul>
+                            <li>
+                                <a href="/">Home <i class="pe-7s-angle-right"></i></a>
+                            </li>
+                            <li>SHOPPING INFORMATION</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="checkout-area section-space-y-axis-100">
+        <div class="container">
+            <form asp-controller="Checkout" asp-action="Index" method="post">
+                <input hidden asp-for="CustomerId" />
+                <div class="row">
+                    <div class="col-lg-6 col-12">
+
+                        <div class="checkbox-form">
+                            <h3>SHOPPING INFORMATION</h3>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="checkout-form-list">
+                                        <label>Name</label>
+                                        <input asp-for="FullName" placeholder="Họ và Tên" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="checkout-form-list">
+                                        <label>Phone <span class="required">*</span></label>
+                                        <input asp-for="Phone" placeholder="Phone" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="checkout-form-list">
+                                        <label>Address <span class="required">*</span></label>
+                                        <input asp-for="Address" placeholder="Address" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-12">
+                        <div class="your-order">
+                            <h3>SHOPPING INFORMATION</h3>
+                            <div class="your-order-table table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="cart-product-name">Product</th>
+                                            <th class="cart-product-total">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Carts.Count() > 0)
+                                        {
+                                            foreach (var item in Carts)
+                                            {
+                                                <tr class="cart_item">
+                                                    <td class="cart-product-name">
+                                                        @item.product.ProductName<strong class="product-quantity">
+                                                            × @item.amount
+                                                        </strong>
+                                                    </td>
+                                                    <td class="cart-product-total"><span class="amount">@item.TotalMoney.ToString("#,##0") RUB</span></td>
+                                                </tr>
+                                            }
+                                        }
+
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="order-total">
+                                            <th>TOTAL ORDER</th>
+                                            <td><strong><span class="amount">@Carts.Sum(x => x.TotalMoney).ToString("#,##0") RUB</span></strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <h5 style="color:red">Please choose a payment method</h5>
+                            <div class="payment-method">
+                                <div class="payment-accordion">
+                                    <div id="accordion">
+                                        <div class="card">
+                                            <div class="card-header" id="#payment-1">
+                                                <h5 class="panel-title">
+                                                    <a href="javascript:void(0)" class="" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true">
+                                                        Payment on delivery
+                                                    </a>
+                                                </h5>
+                                            </div>
+                                            <div id="collapseOne" class="collapse show" data-bs-parent="#accordion">
+                                                <div class="card-body">
+                                                    <p>
+                                                        The customer will pay when receiving the goods
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header" id="#payment-2">
+                                                <h5 class="panel-title">
+                                                    <a href="javascript:void(0)" class="collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false">
+                                                        Bank transfer
+                                                    </a>
+                                                </h5>
+                                            </div>
+                                            <div id="collapseTwo" class="collapse" data-bs-parent="#accordion">
+                                                <div class="card-body">
+                                                    <p>
+                                                        Bank account infomation
+                                                    </p>
+                                                    <p>Account holder: Le Thi Ngoc Lan</p>
+                                                    <p>Account number: 0963102916 - Tinkoff</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="order-button-payment">
+                                        <input value="ORDER CONFIRMATION" type="submit">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</main>
